@@ -19,4 +19,23 @@ class PostController extends Controller
         $post = ['id' => 1, 'desc'=> 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!','title' => 'first_post', 'posted_by' => 'Fimo', 'created_at' => '2024-06-01'];
       return view('posts.show',['post'=>$post]);
     }
+    public function create(){
+        return view('posts.create');
+    }
+    public function store(){
+        // $data = $_POST;
+        // dd(request()->all());
+        return to_route('posts.index');
+    }
+    public function edit(){
+        return view('posts.edit');
+    }
+    public function update(){
+        // dd(request()->all());
+        return to_route('posts.show',1);
+    }
+    public function destroy(){
+        // return "destroy Action";
+        return to_route('posts.index');
+    }
 }

@@ -1,45 +1,24 @@
-@extends('layouts.app');
-@section('content')
-
+@extends('layouts.app')
 @section('title', $post['title'])
-<div id="carouselExampleCaptions" class="carousel slide">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg" class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block" style="color: #909184ff;">
-                <h5>First slide label</h5>
-                <p>{{$post["desc"]}}</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg" class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Created By</h5>
-                <p>{{$post["posted_by"]}}</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg" class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Created At</h5>
-                <p>{{$post["created_at"]}}</p>
+@section('content')
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4" style="background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%); box-shadow: 0 8px 24px rgba(80,80,80,0.3), 0 1.5px 3px rgba(80,80,80,0.15);">
+                <div class="card-header text-white rounded-top-4" style="background: linear-gradient(135deg, #757575 0%, #616161 100%); box-shadow: 0 4px 12px rgba(80,80,80,0.2);">
+                    <h2 class="mb-0">Title : {{ $post['title'] }}</h2>
+                </div>
+             
+                <div class="card-body">
+                    <div class="mt-4">
+                        <span class="badge me-2" style="background: #bdbdbd; color: #212121;">Author: {{ $post["posted_by"] }}</span>
+                        <span class="badge" style="background: #757575; color: #f5f5f5;">{{ \Carbon\Carbon::parse($post["created_at"])->format('F j, Y, g:i a') }}</span>
+                    </div>
+                    <hr>
+                    <p class="fs-5" style="color: #424242;">{{ $post["desc"] }}</p>
+                </div>
             </div>
         </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 </div>
-
-</body>
 @endsection

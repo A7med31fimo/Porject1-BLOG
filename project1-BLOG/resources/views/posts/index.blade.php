@@ -1,7 +1,7 @@
 @extends('layouts.app');
 @section('content')
 <div class="d-flex justify-content-center my-4">
-    <button type="button" class="btn btn-secondary">Add Post</button>
+    <a href="{{ route('posts.create') }}" class="btn btn-secondary">Add Post</a>
 </div>
 <div class="d-flex justify-content-center">
     <div style="min-width: 400px; max-width: 1200px; width: 100%;">
@@ -27,8 +27,16 @@
                     <td>{{ $post['created_at'] }}</td>
                     <td>
                         <a href="{{route('posts.show',$post['id'])}}" type=" button" class="btn btn-info">View</a>
-                        <a href="#" type=" button" class="btn btn-primary">Edit</a>
-                        <a href="#" type="button" class="btn btn-danger">Delete</a>
+                        <a href="{{route('posts.edit',$post['id'])}}" type=" button" class="btn btn-primary">Edit</a>
+
+                        <form style="display:inline" method="POST" action="{{route('posts.destroy',$post['id'])}}">
+                            @csrf
+                            @Method("DELETE")
+                            <button type=" submit" class="btn btn-danger">Delete</button>
+                        </form>
+
+
+
                     </td>
                 </tr>
                 @endforeach

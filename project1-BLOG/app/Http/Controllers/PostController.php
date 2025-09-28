@@ -5,24 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 
 class PostController extends Controller
 {
-
     public function index()
     {
-        $postsFromDB = Post::all();
-        // dd($postsFromDB);
+        // $postsFromDB = Post::all();
+        $posts=Post::withCount('likes')->paginate(10);
+
+        // dd($posts);
         // $posts = [
         //     ['id' => 1, 'desc'=> ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!','title' => 'First Post', 'posted_by' => 'Fimo', 'created_at' => '2024-06-01'],
         //     ['id' => 2, 'desc'=> 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!','title' => 'Second Post', 'posted_by' => 'Alice', 'created_at' => '2024-06-02'],
         //     ['id' => 3,'desc'=> ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, mollitia deleniti reiciendis hic voluptatibus tempore distinctio libero ad beatae voluptatum maiores praesentium excepturi ipsum maxime eos earum sequi nam esse!', 'title' => 'Third Post', 'posted_by' => 'Bob', 'created_at' => '2024-06-03'],
         // ];
-        $users=User::all();
+        // $users=User::all();
         // dd($users[0]->posts);
-
-        return view('posts.index', ['posts' => $postsFromDB,'users'=>$users]);
+        // $posts = Post::orderBy('created_at', 'desc')->paginate(10);
+        return view('posts.index', compact('posts'));
+        // return view('posts.index', ['posts' => $postsFromDB,'users'=>$users]);
     }
     public function show(Post $post)//type hinting
     {
@@ -43,6 +46,7 @@ class PostController extends Controller
     }
     public function create()
     {
+        // dd(Auth::user());
         $users = User::all();
         // dd($users);
         return view('posts.create', compact('users'));
@@ -53,7 +57,7 @@ class PostController extends Controller
         request()->validate([
             'title'=>'required|min:5|max:100|unique:posts,title',
             'desc'=>'required|min:10',
-            'created_by'=>'required|exists:users,id'
+            // 'created_by'=>'required|exists:users,id'
         ]);
 
         // $data = $_POST; php way and is not secur 
@@ -69,11 +73,11 @@ class PostController extends Controller
         //way2 to insert data
         $title = $request['title'];
         $desc = $request['desc'];
-        $created_by_id = $request['created_by']; 
+        // $created_by_id = $request['created_by']; 
         Post::create([
           'title'=>$title,
            'desc'=>$desc,
-           'user_id'=> $created_by_id
+           'user_id'=> Auth::id() //or $created_by_id
         ]);
         return to_route('posts.index');
     }
@@ -117,5 +121,24 @@ class PostController extends Controller
         
         $post->delete();
         return to_route('posts.index');
+    }
+    public function search(Request $request)
+    {
+        // dd($request);
+        $query = $request->input('query');
+        
+        // $users = User::all();
+        // بحث في العنوان أو الوصف
+        $posts = Post::withCount('likes')->where('title', 'LIKE', "%{$query}%")
+            ->orWhere('desc', 'LIKE', "%{$query}%")
+            ->orWhereHas('user', function ($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        // dd($users);
+     
+        return view('posts.index', compact('posts'));
     }
 }

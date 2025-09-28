@@ -36,21 +36,23 @@ Create Post
             <div style="color: #e53e3e; font-size: 14px;">{{ $message }}</div>
             @enderror -->
         </div>
-        <div style="margin-bottom: 18px;">
+        <!-- <div style="margin-bottom: 18px;">
             <label for="created_by" style="display: block; margin-bottom: 6px; font-weight: 500; color: #4a5568;">
                 Created By
-            </label>
-            <select id="created_by" name="created_by"
+            </label> -->
+
+
+            <!-- <select id="created_by" name="created_by"
                 style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; background: #f7fafc;">
                 <option disabled selected value="">Choose Creator</option>
                 @foreach ($users as $user)
                 <option value="{{$user->id}}">{{$user->name}}</option>
                 @endforeach
-            </select>
+            </select> -->
             <!-- @error('created_by')
             <div style="color: #e53e3e; font-size: 14px;">{{ $message }}</div>
             @enderror -->
-        </div>
+        <!-- </div> -->
         <button type="submit" style="margin-top: 12px;color: #fff;background: #798691ff;border: none;padding: 12px;border-radius: 6px;font-size: 16px;font-weight: 600;cursor: pointer;transition: background 0.9s;">Create Post</button>
     </form>
 </div>

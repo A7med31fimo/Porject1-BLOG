@@ -17,24 +17,42 @@
             </thead>
             <tbody>
                 {{--
-                         @dd($data_of_posts) this is used to debug and see the content of the variable
+                         @dd($posts) this is used to debug and see the content of the variable
                         --}}
-                @foreach ($data_of_posts as $post)
+                @foreach ($posts as $post)
+                {{-- @dd($posts,$post);--}}
                 <tr>
-                    <th>{{ $post['id'] }}</th>
-                    <td>{{ $post['title'] }}</td>
-                    <td>{{ $post['posted_by'] }}</td>
-                    <td>{{ $post['created_at'] }}</td>
+                    <th>{{ $post->id }}</th>
+                    <td>{{ $post->title }}</td>
+                    <td>{{ $users[($post->user_id)-1]->name}}</td>
+                    <td>{{ $post->created_at->format('Y-m-d') }}</td>
                     <td>
-                        <a href="{{route('posts.show',$post['id'])}}" type=" button" class="btn btn-info">View</a>
-                        <a href="{{route('posts.edit',$post['id'])}}" type=" button" class="btn btn-primary">Edit</a>
+                        <a href="{{route('posts.show',$post->id)}}" type=" button" class="btn btn-info">View</a>
+                        <a href="{{route('posts.edit',$post->id)}}" type=" button" class="btn btn-primary">Edit</a>
 
-                        <form style="display:inline" method="POST" action="{{route('posts.destroy',$post['id'])}}">
+                        <form id="deleteForm{{$post->id}}" style="display:inline" method="POST" action="{{route('posts.destroy',$post->id)}}">
                             @csrf
-                            @Method("DELETE")
-                            <button type=" submit" class="btn btn-danger">Delete</button>
+                            @method("DELETE")
+                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{$post['id']}})">Delete</button>
                         </form>
-
+                        <script>
+                            function confirmDelete(id) {
+                                Swal.fire({
+                                    title: "⚠️ Are you sure?",
+                                    text: "This action cannot be undone!",
+                                    icon: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonColor: "#e3342f",
+                                    cancelButtonColor: "#6c757d",
+                                    confirmButtonText: "Yes, Delete it",
+                                    cancelButtonText: "Cancel"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById("deleteForm" + id).submit();
+                                    }
+                                });
+                            }
+                        </script>
 
 
                     </td>

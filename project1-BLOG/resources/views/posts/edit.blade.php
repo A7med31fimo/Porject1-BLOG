@@ -71,16 +71,16 @@ Edit Post
 </style>
 <div class="edit-post-container">
     <h1>Edit Post</h1>
-    <form method="POST" Action="{{ route('posts.update',1) }}">
+    <form method="POST" Action="{{ route('posts.update',$post->id) }}">
         @csrf
         @method("PUT")
         <div>
             <label for="title">Title</label>
-            <input type="text" id="title" name="title" required>
+            <input type="text" id="title" value="{{$post['title']}}" name="title" required>
         </div>
         <div>
             <label for="desc">Description</label>
-            <textarea id="desc" name="desc" required></textarea>
+            <textarea id="desc" name="desc" required>{{$post['desc']}}</textarea>
         </div>
         <div style="margin-bottom: 18px;">
             <label for="edit_by" style="display: block; margin-bottom: 6px; font-weight: 500; color: #4a5568;">
@@ -88,9 +88,12 @@ Edit Post
             </label>
             <select id="edit_by" name="edit_by" required
                 style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 15px; background: #f7fafc;">
-                <option disabled selected>Choose editor</option>
-                <option value="1">Ahmed</option>
-                <option value="2">Anonymous</option>
+                <!-- <option disabled selected>Choose editor</option> -->
+                @foreach ($users as $user)
+                <!-- <option @if ($user->id==$post->user_id) selected @endif value="{{$user->id}}">{{$user->name}}</option> -->
+                <option @selected($user->id==$post->user_id) value="{{$user->id}}">{{$user->name}}</option>
+
+                @endforeach
             </select>
         </div>
         <button type="submit" style="margin-top: 12px;color: #fff;background: #798691ff;border: none;padding: 12px;border-radius: 6px;font-size: 16px;font-weight: 600;cursor: pointer;transition: background 0.9s;">Update Post</button>

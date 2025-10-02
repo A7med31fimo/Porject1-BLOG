@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ForgetPasswordController;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\LikeController;
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +17,36 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/test-mail', function () {
+    try {
+        Mail::raw('This is a test email from Laravel using Mailtrap!', function ($message) {
+            $message->to('test@example.com')
+                ->subject('Test Mail');
+        });
+        return '✅ Email sent!';
+    } catch (\Exception $e) {
+        return '❌ Error: ' . $e->getMessage();
+    }
+});
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+})->name('password.request');
+
+Route::post('/forgot-password', [ForgetPasswordController::class, 'sendResetLink'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}/link', function ($token) {
+    return view('emails.password-reset', ['token' => $token]);
+})->name('email.reset');
+
+Route::get('/reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->name('password.reset');
+
+Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'])
+    ->name('password.update');
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout',[AuthController::class ,'logout'])->name('logout');
@@ -44,7 +75,14 @@ Route::delete('/posts/{post}',[PostController::class,'destroy'])->name('posts.de
 // Like and Unlike Routes
 Route::post('/posts/{post}/like', [LikeController::class, 'store'])->name('posts.like')->middleware('auth');
 Route::delete('/posts/{post}/like', [LikeController::class, 'destroy'])->name('posts.unlike')->middleware('auth');
+
+
+
+
+
+
 // 1- define a new route for user. #Done
 // 2- define a controller which render a view. #Done
 // 3- define view which contain posts. #Done
 // 4- remove any static html data.#Done
+

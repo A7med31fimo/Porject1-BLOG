@@ -100,7 +100,7 @@
             </form>
 
             <div class="extra-text">
-                <a href="#">Forgot Password?</a><br>
+                <a href="{{route('password.request')}}">Forgot Password?</a><br>
                 Don’t have an account? <a href="{{ route('register') }}">Sign Up</a>
             </div>
         </div>

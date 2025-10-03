@@ -3,113 +3,90 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up | Tech Blog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - {{ config('app.name') }}</title>
     <style>
         body {
-            background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .register-container {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            backdrop-filter: blur(4px);
+            height: 100vh;
+            margin: 0;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        .auth-container {
+            background: #fff;
             padding: 30px;
-            width: 100%;
-            max-width: 450px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            width: 350px;
+            text-align: center;
         }
 
-        .card h2 {
-            text-align: center;
-            font-weight: bold;
+        h2 {
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: #1e3a8a;
         }
 
-        .btn-primary {
+        input {
             width: 100%;
+            margin: 10px 0;
             padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
             font-size: 16px;
-            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        .form-control {
-            border-radius: 8px;
-            padding: 10px;
+        button:hover {
+            background: #15306d;
         }
 
-        .extra-text {
-            text-align: center;
+        .links {
             margin-top: 15px;
+            font-size: 14px;
         }
 
-        .extra-text a {
-            color: #0d6efd;
-            font-weight: 600;
+        .links a {
+            color: #1e3a8a;
             text-decoration: none;
-        }
-
-        .extra-text a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
-    <div class="register-container">
-        <div class="card">
-            <h2>Create an Account</h2>
+    <div class="auth-container">
+        <h2>📝 Register</h2>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+            <input type="text" name="name" placeholder="Full Name" required>
+            @error('name') <div style="color:red;font-size:13px;">{{ $message }}</div> @enderror
 
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
+            <input type="email" name="email" placeholder="Email" required>
+            @error('email') <div style="color:red;font-size:13px;">{{ $message }}</div> @enderror
 
-            <form method="POST" action="{{ route('register') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="name" class="form-label">👤 Name</label>
-                    <input type="text" name="name" id="name"
-                        class="form-control" value="{{ old('name') }}" required autofocus>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">📧 Email</label>
-                    <input type="email" name="email" id="email"
-                        class="form-control" value="{{ old('email') }}" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">🔑 Password</label>
-                    <input type="password" name="password" id="password"
-                        class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">✅ Confirm Password</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation"
-                        class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Sign Up</button>
-            </form>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+            @error('password') <div style="color:red;font-size:13px;">{{ $message }}</div> @enderror
 
-            <div class="extra-text">
-                Already have an account? <a href="{{ route('login') }}">Login here</a>.
-            </div>
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="links">
+            <a href="{{ route('login') }}">Already have an account? Login</a>
         </div>
     </div>
 </body>

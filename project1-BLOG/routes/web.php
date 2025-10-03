@@ -3,54 +3,34 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ForgetPasswordController;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ResetPasswordController;
+use Illuminate\Support\Facades\Mail;
 Route::get('/', function () {
     return view('welcome');
 });
 
 // Auth Routes
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-// Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/test-mail', function () {
-    try {
-        Mail::raw('This is a test email from Laravel using Mailtrap!', function ($message) {
-            $message->to('test@example.com')
-                ->subject('Test Mail');
-        });
-        return '✅ Email sent!';
-    } catch (\Exception $e) {
-        return '❌ Error: ' . $e->getMessage();
-    }
-});
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->name('password.request');
 
-Route::post('/forgot-password', [ForgetPasswordController::class, 'sendResetLink'])
-    ->name('password.email');
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-Route::get('/reset-password/{token}/link', function ($token) {
-    return view('emails.password-reset', ['token' => $token]);
-})->name('email.reset');
 
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->name('password.reset');
-
-Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'])
-    ->name('password.update');
-
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/logout',[AuthController::class ,'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+
 Route::get('/posts/edit_user_info', [AuthController::class, 'editUserInfo'])->name('user.edit_user_info')->middleware('auth');
 Route::put('/user/{user}', [AuthController::class, 'updateUserInfo'])->name('user.update_user')->middleware('auth');
 
@@ -59,17 +39,17 @@ Route::get('/posts', [PostController::class, 'index'])->name('posts.index')->mid
 // 2- Create Route
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create')->middleware('auth');
 // 3- Edit Route
-Route::get('/posts/{post}/edit',[PostController::class, 'edit'])->name('posts.edit')->middleware('auth');
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit')->middleware('auth');
 // 4- storing Route
-Route::post('/posts',[PostController::class,'store'])->name('posts.store')->middleware('auth');
+Route::post('/posts', [PostController::class, 'store'])->name('posts.store')->middleware('auth');
 // 5- searching method
-Route::get('/posts/search',[PostController::class,'search'])->name('posts.search')->middleware('auth');
+Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search')->middleware('auth');
 // 6- show single Post Route
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware('auth');
 // 7- Update Route
-Route::put('/posts/{post}',[PostController::class,'update'])->name('posts.update')->middleware('auth');
+Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update')->middleware('auth');
 // 8- Delete Post Route
-Route::delete('/posts/{post}',[PostController::class,'destroy'])->name('posts.destroy')->middleware('auth');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy')->middleware('auth');
 
 
 // Like and Unlike Routes
@@ -85,4 +65,3 @@ Route::delete('/posts/{post}/like', [LikeController::class, 'destroy'])->name('p
 // 2- define a controller which render a view. #Done
 // 3- define view which contain posts. #Done
 // 4- remove any static html data.#Done
-

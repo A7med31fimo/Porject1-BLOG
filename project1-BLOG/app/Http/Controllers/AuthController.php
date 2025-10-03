@@ -41,8 +41,6 @@ class AuthController extends Controller
             return redirect('/posts')->with('success', 'Login successful.');
         }
         return redirect()->back()->withErrors(['email' => 'The provided credentials do not match our records.']);
-        
-        return view('auth.login');
     }
     public function logout()
     {

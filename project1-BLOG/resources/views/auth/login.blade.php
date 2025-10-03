@@ -3,106 +3,87 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Login | Tech Blog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - {{ config('app.name') }}</title>
     <style>
         body {
-            background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .login-container {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            backdrop-filter: blur(4px);
+            height: 100vh;
+            margin: 0;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        .auth-container {
+            background: #fff;
             padding: 30px;
-            width: 100%;
-            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            width: 350px;
+            text-align: center;
         }
 
-        .card h2 {
-            text-align: center;
-            font-weight: bold;
+        h2 {
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: #1e3a8a;
         }
 
-        .btn-primary {
+        input {
             width: 100%;
+            margin: 10px 0;
             padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
             font-size: 16px;
-            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        .form-control {
-            border-radius: 8px;
-            padding: 10px;
+        button:hover {
+            background: #15306d;
         }
 
-        .extra-text {
-            text-align: center;
+        .links {
             margin-top: 15px;
+            font-size: 14px;
         }
 
-        .extra-text a {
-            color: #0d6efd;
-            font-weight: 600;
+        .links a {
+            color: #1e3a8a;
             text-decoration: none;
-        }
-
-        .extra-text a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
-    <div class="login-container">
-        <div class="card">
-            <h2>Login</h2>
+    <div class="auth-container">
+        <h2>🔐 Login</h2>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <input type="email" name="email" placeholder="Email" required autofocus>
+            @error('email') <div style="color:red;font-size:13px;">{{ $message }}</div> @enderror
 
-            @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+            <input type="password" name="password" placeholder="Password" required>
+            @error('password') <div style="color:red;font-size:13px;">{{ $message }}</div> @enderror
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="email" class="form-label">📧 Email</label>
-                    <input type="email" name="email" id="email" class="form-control" required autofocus>
-                    @error('email')
-                    <span class="text-danger small">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">🔑 Password</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
-                    @error('password')
-                    <span class="text-danger small">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" name="remember" id="remember" class="form-check-input">
-                    <label class="form-check-label" for="remember">Remember Me</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
+            <button type="submit">Login</button>
+        </form>
 
-            <div class="extra-text">
-                <a href="{{route('password.request')}}">Forgot Password?</a><br>
-                Don’t have an account? <a href="{{ route('register') }}">Sign Up</a>
-            </div>
+        <div class="links">
+            <a href="{{ route('password.request') }}">Forgot password?</a> |
+            <a href="{{ route('register') }}">Create an account</a>
         </div>
     </div>
 </body>

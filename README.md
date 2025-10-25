@@ -10,6 +10,9 @@
 **Fimo Blog** is a full-stack web application built with **Laravel (Backend)** and **HTML, CSS, Bootstrap (Frontend)**.  
 It allows users to create, edit, and manage blog posts with authentication, session management, and database integration.
 
+### Short Video to see features
+🔗 **[Visit Video](https://www.youtube.com/watch?v=z51PlsubQ_M)**
+
 ---
 
 ## ⚙️ Features
